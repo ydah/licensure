@@ -1,39 +1,116 @@
 # Licensure
 
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/licensure`. To experiment with that code, run `bin/console` for an interactive prompt.
+Licensure is a RubyGem CLI tool that inspects dependency licenses from `Gemfile.lock` and checks them against a configurable allow list.
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
-
-Install the gem and add to the application's Gemfile by executing:
+Install as a gem:
 
 ```bash
-bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+gem install licensure
 ```
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+Or add it to your `Gemfile`:
+
+```ruby
+gem "licensure"
+```
+
+## Quick Start
+
+Initialize config:
 
 ```bash
-gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+licensure init
 ```
 
-## Usage
+List dependency licenses:
 
-TODO: Write usage instructions here
+```bash
+licensure list
+```
+
+Check licenses against `.licensure.yml`:
+
+```bash
+licensure check
+```
+
+## Configuration
+
+Licensure uses `.licensure.yml`:
+
+```yaml
+allowed_licenses:
+  - MIT
+  - Apache-2.0
+  - BSD-2-Clause
+  - BSD-3-Clause
+  - ISC
+  - Ruby
+
+ignored_gems:
+  - bundler
+  - rake
+
+deny_unknown: true
+```
+
+- `allowed_licenses`: Allowed license identifiers. Empty means allow all.
+- `ignored_gems`: Gem names excluded from checks.
+- `deny_unknown`: Treat gems without license metadata as warnings.
+
+## Commands
+
+```bash
+licensure list [--format table|csv|json|markdown] [--recursive] [--output FILE] [--gemfile-lock PATH]
+licensure check [--config FILE] [--recursive] [--format table|csv|json|markdown] [--gemfile-lock PATH]
+licensure init
+licensure version
+licensure help [command]
+```
+
+## Output Formats
+
+`list` and `check` support:
+
+- `table`
+- `csv`
+- `json`
+- `markdown`
+
+Example:
+
+```bash
+licensure list --format json
+licensure check --format markdown
+```
+
+## CI Example (GitHub Actions)
+
+```yaml
+name: License Check
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+      - run: gem install licensure
+      - run: licensure check
+```
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/licensure.
+```bash
+bundle install
+bundle exec rake spec
+```
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+Released under the MIT License. See `LICENSE.txt`.

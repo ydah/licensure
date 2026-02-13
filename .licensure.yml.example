@@ -1,0 +1,14 @@
+# .licensure.yml
+allowed_licenses:
+  - MIT
+  - Apache-2.0
+  - BSD-2-Clause
+  - BSD-3-Clause
+  - ISC
+  - Ruby
+
+ignored_gems:
+  - bundler
+  - rake
+
+deny_unknown: true
