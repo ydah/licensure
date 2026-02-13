@@ -34,12 +34,13 @@ module Licensure
           next
         end
 
-        if allowed_license?(info.licenses)
+        disallowed = disallowed_licenses(info.licenses)
+        if disallowed.empty?
           passed << info
           next
         end
 
-        reason = "License '#{info.licenses.join(", ")}' is not in the allowed list"
+        reason = "Licenses '#{disallowed.join(", ")}' are not in the allowed list"
         violations << Violation.new(gem_info: info, reason: reason)
       end
 
@@ -49,9 +50,9 @@ module Licensure
     private
 
     # @param licenses [Array<String>]
-    # @return [Boolean]
-    def allowed_license?(licenses)
-      licenses.any? { |license| @configuration.allowed_licenses.include?(license) }
+    # @return [Array<String>]
+    def disallowed_licenses(licenses)
+      licenses.reject { |license| @configuration.allowed_licenses.include?(license) }
     end
   end
 end

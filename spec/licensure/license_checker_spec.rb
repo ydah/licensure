@@ -79,11 +79,27 @@ RSpec.describe Licensure::LicenseChecker do
     expect(result.violations).to be_empty
   end
 
-  it "passes when one of multiple licenses is allowed" do
+  it "flags gems when one of multiple licenses is disallowed" do
     gem_info = Licensure::GemLicenseInfo.new(
       name: "dual-license",
       version: "1.0",
       licenses: ["GPL-3.0", "MIT"],
+      source: :api,
+      homepage: nil
+    )
+
+    result = checker.check([gem_info])
+
+    expect(result.passed).to be_empty
+    expect(result.violations.size).to eq(1)
+    expect(result.violations.first.reason).to include("GPL-3.0")
+  end
+
+  it "passes when all multiple licenses are allowed" do
+    gem_info = Licensure::GemLicenseInfo.new(
+      name: "dual-allowed",
+      version: "1.0",
+      licenses: ["MIT", "Apache-2.0"],
       source: :api,
       homepage: nil
     )

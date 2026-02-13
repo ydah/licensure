@@ -56,7 +56,7 @@ ignored_gems:
 deny_unknown: true
 ```
 
-- `allowed_licenses`: Allowed license identifiers. Empty means allow all.
+- `allowed_licenses`: Allowed license identifiers. Empty means allow all. For gems with multiple licenses, all reported licenses must be included.
 - `ignored_gems`: Gem names excluded from checks.
 - `deny_unknown`: Treat gems without license metadata as warnings.
 
