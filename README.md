@@ -1,4 +1,4 @@
-# Licensure
+# Licensure [![Gem Version](https://badge.fury.io/rb/licensure.svg)](https://badge.fury.io/rb/licensure) [![Ruby](https://github.com/ydah/licensure/actions/workflows/main.yml/badge.svg)](https://github.com/ydah/licensure/actions/workflows/main.yml)
 
 Licensure is a RubyGem CLI tool that inspects dependency licenses from `Gemfile.lock` and checks them against a configurable allow list.
 
