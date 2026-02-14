@@ -109,4 +109,19 @@ RSpec.describe Licensure::LicenseChecker do
     expect(result.passed).to eq([gem_info])
     expect(result.violations).to be_empty
   end
+
+  it "passes Apache label variants for SPDX allow-list entries" do
+    gem_info = Licensure::GemLicenseInfo.new(
+      name: "apache-label-gem",
+      version: "3.0.0",
+      licenses: ["Apache License, Version 2.0"],
+      source: :api,
+      homepage: nil
+    )
+
+    result = checker.check([gem_info])
+
+    expect(result.passed).to eq([gem_info])
+    expect(result.violations).to be_empty
+  end
 end

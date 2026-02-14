@@ -193,24 +193,13 @@ module Licensure
     # @param key [String, nil]
     # @return [Array<String>]
     def canonicalize_licenses(licenses, spdx_id, name, key)
-      fingerprints = [spdx_id, name, key].filter_map { |value| license_fingerprint(value) }.uniq
+      fingerprints = [spdx_id, name, key].filter_map { |value| LicenseMatcher.fingerprint(value) }.uniq
       return licenses if fingerprints.empty?
 
       licenses.map do |license|
-        fingerprint = license_fingerprint(license)
+        fingerprint = LicenseMatcher.fingerprint(license)
         fingerprints.include?(fingerprint) ? spdx_id : license
       end.uniq
-    end
-
-    # @param value [String, nil]
-    # @return [String, nil]
-    def license_fingerprint(value)
-      fingerprint = value.to_s.downcase
-                         .gsub(/\b(the|license|version)\b/, "")
-                         .gsub(/[^a-z0-9]/, "")
-      return nil if fingerprint.empty?
-
-      fingerprint
     end
 
     # @param name [String]

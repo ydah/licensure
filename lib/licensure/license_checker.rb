@@ -52,7 +52,15 @@ module Licensure
     # @param licenses [Array<String>]
     # @return [Array<String>]
     def disallowed_licenses(licenses)
-      licenses.reject { |license| @configuration.allowed_licenses.include?(license) }
+      licenses.reject { |license| allowed_license?(license) }
+    end
+
+    # @param license [String]
+    # @return [Boolean]
+    def allowed_license?(license)
+      @configuration.allowed_licenses.any? do |allowed_license|
+        LicenseMatcher.match?(allowed_license, license)
+      end
     end
   end
 end
