@@ -60,6 +60,8 @@ deny_unknown: true
 - `ignored_gems`: Gem names excluded from checks.
 - `deny_unknown`: Treat gems without license metadata as warnings.
 
+When a gem reports non-SPDX license text and its `source_code_uri` or `homepage` points to GitHub, Licensure queries the GitHub repository license API and normalizes matched labels to `spdx_id` (for example, `Apache License, Version 2.0` -> `Apache-2.0`). Set `GITHUB_TOKEN` in CI to reduce API rate-limit risk.
+
 ## Commands
 
 ```bash
